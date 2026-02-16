@@ -12,7 +12,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','SF Pro Text'
 a{text-decoration:none;cursor:pointer;color:inherit}
 
 /* NAV */
-.nav{position:sticky;top:0;z-index:1000;height:44px;display:flex;align-items:center;justify-content:center;gap:28px;padding:0 24px;background:rgba(251,251,253,.92);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);border-bottom:1px solid rgba(0,0,0,.06)}
+.nav{position:sticky;top:0;z-index:1000;height:44px;display:flex;align-items:center;justify-content:center;gap:28px;padding:0 24px;background:rgba(251,251,253,.72);backdrop-filter:saturate(200%) blur(40px);-webkit-backdrop-filter:saturate(200%) blur(40px);border-bottom:1px solid rgba(0,0,0,.04);box-shadow:0 0.5px 0 rgba(0,0,0,.04)}
 .nav a{color:#1d1d1f;font-size:12px;font-weight:400;opacity:.8;transition:opacity .2s}
 .nav a:hover{opacity:1}
 .nav .logo svg{width:18px;height:22px;fill:#1d1d1f;opacity:.8}
@@ -284,14 +284,22 @@ a{text-decoration:none;cursor:pointer;color:inherit}
 
 <!-- CTA — full width white -->
 <div class="tile-full bg-white" style="min-height:340px;padding-bottom:60px">
-  <h2>Let's build what's next.</h2>
-  <p class="sub">Vanessa Bass, I'd love to bring 8+ years of shipping AI products to Apple.</p>
-  <div class="btns">
-    <a href="https://ranajunaid.com/" target="_blank" class="btn-b">View my portfolio</a>
-    <a href="https://calendly.com/ranaajunaid01/let-s-talk-product" target="_blank" class="btn-o">Schedule a call</a>
+  <p class="sub" style="margin-bottom:4px;font-size:18px;color:#6e6e73">I love building products. I love my users. I want to do it at Apple.</p>
+  <h2 style="font-size:64px;margin-bottom:8px">Vanessa, 10 minutes.<br>I'll show you why.</h2>
+  <div style="display:flex;gap:20px;justify-content:center;margin-top:32px;flex-wrap:wrap">
+    <button onclick="trackClick('Yes')" style="background:#2997ff;color:#fff;border:none;padding:18px 56px;border-radius:100px;font-size:24px;font-weight:600;font-family:inherit;cursor:pointer;transition:all .2s;box-shadow:0 4px 20px rgba(41,151,255,.3)" onmouseover="this.style.background='#0077ed';this.style.transform='scale(1.04)'" onmouseout="this.style.background='#2997ff';this.style.transform='scale(1)'">Yes</button>
+    <button onclick="trackClick('Not yet')" style="background:none;color:#2997ff;border:2px solid #2997ff;padding:16px 44px;border-radius:100px;font-size:24px;font-weight:600;font-family:inherit;cursor:pointer;transition:all .2s" onmouseover="this.style.background='#2997ff';this.style.color='#fff';this.style.transform='scale(1.04)'" onmouseout="this.style.background='none';this.style.color='#2997ff';this.style.transform='scale(1)'">Not yet</button>
   </div>
 </div>
 
+</div>
+
+<!-- POPUP -->
+<div id="popup" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.5);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center">
+  <div style="background:#fff;border-radius:20px;padding:48px 40px;max-width:480px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.15);animation:fadeUp .4s ease">
+    <div id="popup-text" style="font-size:22px;font-weight:600;color:#1d1d1f;line-height:1.5;margin-bottom:24px"></div>
+    <button onclick="closePopup()" style="background:#2997ff;color:#fff;border:none;padding:12px 32px;border-radius:100px;font-size:17px;font-family:inherit;cursor:pointer;transition:background .2s" onmouseover="this.style.background='#0077ed'" onmouseout="this.style.background='#2997ff'">Close</button>
+  </div>
 </div>
 
 <!-- FOOTER -->
@@ -307,6 +315,23 @@ a{text-decoration:none;cursor:pointer;color:inherit}
   <div class="footer-copy">Personalized for Vanessa Bass at Apple — Not affiliated with Apple Inc. &nbsp;|&nbsp; Rana Junaid 2026</div>
 </footer>
 
-<script>window.addEventListener('scroll',function(){document.querySelector('.nav').style.background=window.scrollY>10?'rgba(251,251,253,.96)':'rgba(251,251,253,.92)'})</script>
+<script>
+window.addEventListener('scroll',function(){document.querySelector('.nav').style.background=window.scrollY>10?'rgba(251,251,253,.82)':'rgba(251,251,253,.72)'});
+
+function trackClick(action){
+  var recruiter='Vanessa Bass';
+  fetch('https://formspree.io/f/xykdwrrb',{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify({recruiter:recruiter,action:action,time:new Date().toISOString()})});
+  if(action==='Yes'){
+    document.getElementById('popup-text').innerHTML='Amazing! Thank you, Vanessa. &#10084;&#65039;<br><br>Redirecting you to schedule a call...';
+    document.getElementById('popup').style.display='flex';
+    setTimeout(function(){window.open('https://calendly.com/ranaajunaid01/let-s-talk-product','_blank')},2000);
+  } else {
+    document.getElementById('popup-text').innerHTML='Thank you so much for reading all the way to the end, Vanessa. I really appreciate it. &#128591;<br><br>If you ever want to chat, I\'m just a click away.';
+    document.getElementById('popup').style.display='flex';
+  }
+}
+function closePopup(){document.getElementById('popup').style.display='none'}
+document.getElementById('popup').addEventListener('click',function(e){if(e.target===this)closePopup()});
+</script>
 </body>
 </html>
